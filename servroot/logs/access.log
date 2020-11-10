@@ -1,4 +1,0 @@
-127.0.0.1 - my-username [10/Nov/2020:08:39:29 +0000] "GET /request HTTP/1.1" 200 959 "-" "lua-resty-http/0.14 (Lua) ngx_lua/10015"
-127.0.0.1 - my-username [10/Nov/2020:08:39:29 +0000] "GET /request HTTP/1.1" 200 959 "-" "lua-resty-http/0.14 (Lua) ngx_lua/10015"
-127.0.0.1 - my-username [10/Nov/2020:08:39:29 +0000] "GET /request HTTP/1.1" 200 959 "-" "lua-resty-http/0.14 (Lua) ngx_lua/10015"
-127.0.0.1 - my-username [10/Nov/2020:08:39:29 +0000] "GET /request HTTP/1.1" 200 959 "-" "lua-resty-http/0.14 (Lua) ngx_lua/10015"
