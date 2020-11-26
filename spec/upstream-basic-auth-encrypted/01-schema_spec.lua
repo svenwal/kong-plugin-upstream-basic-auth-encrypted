@@ -24,5 +24,15 @@ describe(PLUGIN_NAME .. ": (schema)", function()
     assert.is_truthy(ok)
   end)
 
+ -- it("encrypts the password password", function()
+ --   local ok, err = validate({
+ --       username = "My-Username",
+ --       password = "my-password",
+ --       encrypt_password = true
+ --     })
+ --   assert.is_nil(err)
+ --   assert.is_truthy(ok)
+ -- end)
+
 
 end)

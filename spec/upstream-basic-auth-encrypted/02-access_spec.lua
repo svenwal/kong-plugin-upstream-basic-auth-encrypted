@@ -84,7 +84,7 @@ for _, strategy in helpers.each_strategy() do
         it("gets a 'authorization' header with expected base64 encoded string when password is encrypted", function()
           local r = client:get("/request", {
             headers = {
-              host = "test1.com"
+              host = "test2.com"
             }
           })
           -- validate that the request succeeded, response status 200
