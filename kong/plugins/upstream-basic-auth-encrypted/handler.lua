@@ -1,6 +1,6 @@
 local plugin = {
     PRIORITY = 987,
-    VERSION = "0.2",
+    VERSION = "0.3",
   }
 
 function plugin:access(plugin_conf)
@@ -12,9 +12,20 @@ function plugin:access(plugin_conf)
     
     if plugin_conf.encrypt_password == true then
       kong.log("********************** About to decrypt: " .. password)
+      local ngx_re = require "ngx.re"
+      local splitted, err = ngx_re.split(password,",")
+      --if err then
+      --  kong.log("Splitting up error")
+      --end
+      kong.log("First " .. splitted[1])
+      local salt = splitted[2];
+      local encoded_password = splitted[3];
+      kong.log("Salt: " .. salt)
+      kong.log("Decoded salt: " .. ngx.decode_base64(salt))
+      kong.log("Encoded password: " .. encoded_password)
       local aes_256_cbc_sha512x5 = aes:new("AKeyForAES-256-CBC",
-        "MySalt!!", aes.cipher(256,"cbc"), aes.hash.sha512, 5)
-        password=aes_256_cbc_sha512x5:decrypt(ngx.decode_base64(plugin_conf.password))
+      "MySalt!!", aes.cipher(256,"cbc"), aes.hash.sha512, 5)
+      password=aes_256_cbc_sha512x5:decrypt(ngx.decode_base64(encoded_password))
     end
 
     local auth_string = username .. ':' .. password;

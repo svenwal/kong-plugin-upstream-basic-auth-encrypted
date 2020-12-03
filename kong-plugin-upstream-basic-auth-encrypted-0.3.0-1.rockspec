@@ -1,12 +1,12 @@
 package = "kong-plugin-upstream-basic-auth-encrypted" 
-version = "0.2.0-1"  
+version = "0.3.0-1"  
 
 local pluginName = package:match("^kong%-plugin%-(.+)$")
 
 supported_platforms = {"linux", "macosx"}
 source = {
   url = "https://github.com/svenwal/kong-plugin-upstream-basic-auth-encrypted",
-  tag = "0.2.0"
+  tag = "0.3.0"
 }
 
 description = {
