@@ -1,6 +1,6 @@
 local plugin = {
     PRIORITY = 987,
-    VERSION = "0.3",
+    VERSION = "0.3.1",
   }
 
 function plugin:access(plugin_conf)

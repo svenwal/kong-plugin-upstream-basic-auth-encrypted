@@ -9,6 +9,12 @@ local plugin_name = ({...})[1]:match("^kong%.plugins%.([^%.]+)")
 local function encrypt_password(config, bla)
   kong.log("********************** In encrypt function")
   if config.encrypt_password == true then
+    print("Start encrypt function" .. config.password)
+    if config.password:sub(1, 7) == "SHA512," then
+      print("Already encrypted, not touching it")
+      return true
+    end
+    
     local aes = require "resty.aes"
     print "*******"
     print("Encrypted password two parameters")

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.1
+
+* Already encrypted password (for example when opening in Kong Manager and then just hitting save again) are not (double) encyrpted again
+
 ## 0.3
 
 * Salt is now generated dynamically
