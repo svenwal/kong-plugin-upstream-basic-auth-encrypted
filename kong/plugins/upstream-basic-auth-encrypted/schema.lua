@@ -1,6 +1,14 @@
 local typedefs = require "kong.db.schema.typedefs"
 
-
+kong.log.debug("loading secret")
+local f = assert(io.open("/etc/kong/basic_auth_secret.txt", "rb"))
+local secret = f:read("*all")
+f:close()
+if secret == nil then
+  kong.log.warn("Basic auth upstream plugin without a secret being specified in /etc/kong/basic_auth_secret.txt")
+end
+basic_auth_upstream_secret = secret
+kong.log.debug("Secure password: " .. basic_auth_upstream_secret)
 
 -- Grab pluginname from module name
 local plugin_name = ({...})[1]:match("^kong%.plugins%.([^%.]+)")
@@ -20,7 +28,7 @@ local function encrypt_password(config, bla)
       kong.log.err("No Encryption secret available")
     end
 
-    kong.log("Secret " .. basic_auth_upstream_secret)
+    --kong.log("Secret " .. basic_auth_upstream_secret)
     
     local aes = require "resty.aes"
     print "*******"
@@ -37,15 +45,10 @@ local function encrypt_password(config, bla)
     eight_chars_salt = salt:sub(1, 8)
     print("Salt " .. eight_chars_salt)
     print(#eight_chars_salt)
-    local aes_256_cbc_sha512x5 = assert(aes:new("AKeyForAES-256-CBC",
+    local aes_256_cbc_sha512x5 = assert(aes:new(basic_auth_upstream_secret,
     eight_chars_salt, aes.cipher(256,"cbc"), aes.hash.sha512, 5))
     local encrypted = aes_256_cbc_sha512x5:encrypt(config.password)
     config.password="SHA512," .. ngx.encode_base64(eight_chars_salt) .. "," .. ngx.encode_base64(encrypted)
-    --print("Encrypted: " .. config.password)
-    --local decrypted=aes_512:decrypt(ngx.decode_base64(config.password))
-    --print("Decrypted: " .. decrypted)
-    --print(config.password)
-    --config.password=ngx.encode_base64(encrypted)
   end
   return true, nil, {password = "test"}
 end 

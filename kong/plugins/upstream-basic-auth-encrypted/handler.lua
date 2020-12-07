@@ -40,7 +40,7 @@ function plugin:access(plugin_conf)
       print(#salt)
       kong.log("Decoded salt: " .. ngx.decode_base64(salt))
       kong.log("Encoded password: " .. encoded_password)
-      local aes_256_cbc_sha512x5 = assert(aes:new("AKeyForAES-256-CBC",
+      local aes_256_cbc_sha512x5 = assert(aes:new(basic_auth_upstream_secret,
       salt, aes.cipher(256,"cbc"), aes.hash.sha512, 5))
       password=aes_256_cbc_sha512x5:decrypt(ngx.decode_base64(encoded_password))
       if password == nil then
