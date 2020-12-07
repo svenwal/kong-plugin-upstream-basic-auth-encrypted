@@ -8,43 +8,26 @@ if secret == nil then
   kong.log.warn("Basic auth upstream plugin without a secret being specified in /etc/kong/basic_auth_secret.txt")
 end
 basic_auth_upstream_secret = secret
-kong.log.debug("Secure password: " .. basic_auth_upstream_secret)
 
 -- Grab pluginname from module name
 local plugin_name = ({...})[1]:match("^kong%.plugins%.([^%.]+)")
 
 
 local function encrypt_password(config, bla)
-  kong.log("********************** In encrypt function")
   if config.encrypt_password == true then
-    print("Start encrypt function" .. config.password)
     if config.password:sub(1, 7) == "SHA512," then
-      print("Already encrypted, not touching it")
+      kong.log.debug("Password already encrypted, not touching it")
       return true
     end
 
     if basic_auth_upstream_secret == nil then
-      print("!!! No Encryption secret available")
       kong.log.err("No Encryption secret available")
     end
-
-    --kong.log("Secret " .. basic_auth_upstream_secret)
     
     local aes = require "resty.aes"
-    print "*******"
-    print(config.password)
-    print(config.encrypt_password)
-    print(bla)
-    print("encryption on")
-
     local uuid = require "kong.tools.utils".uuid
-
-
     local salt = uuid()
-    
-    eight_chars_salt = salt:sub(1, 8)
-    print("Salt " .. eight_chars_salt)
-    print(#eight_chars_salt)
+    local eight_chars_salt = salt:sub(1, 8)
     local aes_256_cbc_sha512x5 = assert(aes:new(basic_auth_upstream_secret,
     eight_chars_salt, aes.cipher(256,"cbc"), aes.hash.sha512, 5))
     local encrypted = aes_256_cbc_sha512x5:encrypt(config.password)

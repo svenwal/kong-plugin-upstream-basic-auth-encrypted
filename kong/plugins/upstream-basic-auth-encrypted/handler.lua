@@ -1,6 +1,6 @@
 local plugin = {
     PRIORITY = 987,
-    VERSION = "0.3.1",
+    VERSION = "0.9.0",
   }
 
 function plugin:init_worker()
@@ -12,21 +12,18 @@ function plugin:init_worker()
     kong.log.warn("Basic auth upstream plugin without a secret being specified in /etc/kong/basic_auth_secret.txt")
   end
   basic_auth_upstream_secret = secret
-  kong.log.debug("Secure password: " .. basic_auth_upstream_secret)
 end
 
 function plugin:access(plugin_conf)
     local aes = require "resty.aes"
-    kong.log("Secret" .. basic_auth_upstream_secret)
     local username = plugin_conf.username
     local password = plugin_conf.password or ''
-    kong.log("********************** password: " .. password)
     
     if plugin_conf.encrypt_password == true then
       if basic_auth_upstream_secret == nil then
         kong.log.err("No decryption secret available")
       end
-      kong.log("********************** About to decrypt: " .. password)
+      kong.log.debug("About to decrypt: " .. password)
       local ngx_re = require "ngx.re"
       local splitted, err = ngx_re.split(password,",")
       if err then
@@ -36,10 +33,6 @@ function plugin:access(plugin_conf)
       local salt = splitted[2];
       local encoded_password = splitted[3];
       salt = ngx.decode_base64(salt)
-      kong.log("Decrypting Salt: " .. salt)
-      print(#salt)
-      kong.log("Decoded salt: " .. ngx.decode_base64(salt))
-      kong.log("Encoded password: " .. encoded_password)
       local aes_256_cbc_sha512x5 = assert(aes:new(basic_auth_upstream_secret,
       salt, aes.cipher(256,"cbc"), aes.hash.sha512, 5))
       password=aes_256_cbc_sha512x5:decrypt(ngx.decode_base64(encoded_password))

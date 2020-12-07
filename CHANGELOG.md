@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.9.0
+
+* First feature complete version for testing
+
+## 0.5.0
+
+* Reading secret from harddisk
+
+## 0.4.0
+
+* Salt now automatally truncated to 8 characters
+
 ## 0.3.1
 
 * Already encrypted password (for example when opening in Kong Manager and then just hitting save again) are not (double) encyrpted again
