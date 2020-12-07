@@ -1,0 +1,1 @@
+echo "Random_Password" > /etc/kong/basic_auth_secret.txt

@@ -14,10 +14,16 @@ local function encrypt_password(config, bla)
       print("Already encrypted, not touching it")
       return true
     end
+
+    if basic_auth_upstream_secret == nil then
+      print("!!! No Encryption secret available")
+      kong.log.err("No Encryption secret available")
+    end
+
+    kong.log("Secret " .. basic_auth_upstream_secret)
     
     local aes = require "resty.aes"
     print "*******"
-    print("Encrypted password two parameters")
     print(config.password)
     print(config.encrypt_password)
     print(bla)
@@ -27,11 +33,14 @@ local function encrypt_password(config, bla)
 
 
     local salt = uuid()
-    print("Salt " .. salt)
-    local aes_512 = aes:new("AKeyForAES-256-CBC",
-    "MySalt!!", aes.cipher(256,"cbc"), aes.hash.sha512, 5)
-    local encrypted = aes_512:encrypt(config.password)
-    config.password="SHA512," .. ngx.encode_base64(salt) .. "," .. ngx.encode_base64(encrypted)
+    
+    eight_chars_salt = salt:sub(1, 8)
+    print("Salt " .. eight_chars_salt)
+    print(#eight_chars_salt)
+    local aes_256_cbc_sha512x5 = assert(aes:new("AKeyForAES-256-CBC",
+    eight_chars_salt, aes.cipher(256,"cbc"), aes.hash.sha512, 5))
+    local encrypted = aes_256_cbc_sha512x5:encrypt(config.password)
+    config.password="SHA512," .. ngx.encode_base64(eight_chars_salt) .. "," .. ngx.encode_base64(encrypted)
     --print("Encrypted: " .. config.password)
     --local decrypted=aes_512:decrypt(ngx.decode_base64(config.password))
     --print("Decrypted: " .. decrypted)
