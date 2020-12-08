@@ -15,12 +15,14 @@ Next to [Kong](https://konghq.com) (surprise) you **must** to have a secret in a
 |FORM PARAMETER|DEFAULT|DESCRIPTION|
 |:----|:------:|------:|
 |config.username||The username to be sent upstream as basic auth|
-|config.password||The username to be sent upstream as basic auth|
+|config.password||The password to be sent upstream as basic auth|
 |config.encrypt_password|true|Parameter if the password shall be encrypted|
 
 ## Implementation details
 
-Each password is encryted using SHA512 with a random salt per plugin instance
+Each password is encryted using SHA512 with a random salt per plugin instance.
+
+Automated tests for use with [Kong Pongo](https://github.com/Kong/kong-pongo) have been added - try `pongo run` in the main folder.
 
 
 
