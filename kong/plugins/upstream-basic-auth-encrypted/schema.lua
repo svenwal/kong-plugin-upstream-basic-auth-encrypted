@@ -58,7 +58,7 @@ local schema = {
 
           { encrypt_password = {
             type = "boolean",
-            default = false       
+            default = true       
             }
           }
         },

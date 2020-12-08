@@ -1,6 +1,6 @@
 local plugin = {
     PRIORITY = 987,
-    VERSION = "0.9.0",
+    VERSION = "0.9.1",
   }
 
 function plugin:init_worker()

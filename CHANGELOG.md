@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.9.1
+
+* Added README contents
+* Encyption is now the default setting
+
 ## 0.9.0
 
 * First feature complete version for testing
